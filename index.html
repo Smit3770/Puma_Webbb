@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUMA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* User Dropdown Styles */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 280px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            padding: 20px;
+            display: none;
+            z-index: 1000;
+            margin-top: 10px;
+        }
+
+        .user-dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-content h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .dropdown-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-login, .btn-signup {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login {
+            background: #000;
+            color: #fff;
+        }
+
+        .btn-signup {
+            background: #f5f5f5;
+            color: #000;
+            border: 1px solid #ddd;
+        }
+
+        .btn-login:hover {
+            background: #333;
+        }
+
+        .btn-signup:hover {
+            background: #e5e5e5;
+        }
+
+        /* Logout Button Styles */
+        .btn-logout {
+            width: 100%;
+            padding: 12px 20px;
+            background: #ff3e3e;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(255, 62, 62, 0.2);
+        }
+
+        .btn-logout:active {
+            background: #ff5252;
+            transform: translateY(1px);
+            box-shadow: 0 1px 4px rgba(255, 62, 62, 0.2);
+        }
+
+        .user-info {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .user-info p {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .user-info #userName {
+            font-weight: 600;
+            color: #000;
+            font-size: 16px;
+        }
+
+        /* Dropdown Arrow */
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 20px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            transform: rotate(45deg);
+            box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* User Icon Animation */
+        .user-toggle {
+            transition: transform 0.3s ease;
+        }
+
+        .user-dropdown:hover .user-toggle {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .dropdown-menu {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                width: 100%;
+                border-radius: 0;
+                margin-top: 0;
+            }
+
+            .dropdown-menu::before {
+                display: none;
+            }
+        }
+
+        /* Blog Section Styles */
+        .blog-section {
+            padding: 60px 20px;
+            background: #f8f8f8;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 0 20px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-card:hover .blog-image img {
+            transform: scale(1.1);
+        }
+
+        .blog-date {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-date span {
+            display: block;
+            font-weight: 600;
+        }
+
+        .blog-date span:first-child {
+            font-size: 20px;
+            color: #000;
+        }
+
+        .blog-date span:last-child {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .blog-content {
+            padding: 25px;
+        }
+
+        .blog-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #000;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .blog-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #000;
+            line-height: 1.4;
+        }
+
+        .blog-excerpt {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .read-more {
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.3s ease;
+        }
+
+        .read-more:hover {
+            gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+                padding: 0 15px;
+            }
+
+            .blog-card {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Why Choose Section Styles */
+        .why-choose-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #fff 0%, #f8f8f8 100%);
+        }
+
+        .why-choose-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .why-choose-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .why-choose-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .icon-wrapper i {
+            font-size: 28px;
+            color: white;
+        }
+
+        .why-choose-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        .why-choose-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Stats Container Styles */
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 60px auto 0;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            min-width: 200px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .why-choose-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stat-item {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+
+        /* Product Details Styles */
+        .product-details {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .product-details h3 {
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        /* Wishlist Button Styles */
+        .collection-card .wishlist-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .collection-card .wishlist-btn i {
+            font-size: 18px;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .collection-card .wishlist-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .collection-card .wishlist-btn.active i {
+            color: #ff3e3e;
+        }
+
+        .collection-card .image-wrapper {
+            position: relative;
+        }
+
+        /* Toast Notification Styles */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <img src="images/logo.png" alt="PUMA">
+            </a>
+            
+            <!-- Main Menu -->
+            <div class="nav-links">
+                <a href="#" class="nav-item active"><span class="highlight">Home</span></a>
+                <a href="men.html" class="nav-item">Men</a>
+                <a href="sports.html" class="nav-item">Sports</a>
+                <a href="women.html" class="nav-item">Women</a>
+                <a href="team-merchandise.html" class="nav-item">Team Merchandise</a>
+            </div>
+
+            <!-- Right Menu -->
+            <div class="nav-right">
+                <!-- Full search button (desktop) -->
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                    <span>SEARCH</span>
+                </button>
+                <!-- Icon-only search button (mobile) -->
+                <button class="search-btn icon-only">
+                    <i class="fas fa-search"></i>
+                </button>
+                <div class="nav-icons">
+                    <a href="wishlist.html" class="icon-link">
+                        <i class="far fa-heart"></i>
+                    </a>
+                    <a href="cart.html" class="icon-link">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                    <div class="user-dropdown">
+                        <a href="#" class="icon-link user-toggle"><i class="far fa-user"></i></a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-content">
+                                <h3>MY PUMA ACCOUNT</h3>
+                                <div class="dropdown-buttons" id="authButtons">
+                                    <a href="login.html" class="btn-login" id="loginBtn">Login</a>
+                                    <a href="signup.html" class="btn-signup" id="signBtn">Sign Up</a>
+                                </div>
+                                <div class="user-info" id="userInfo" style="display: none;">
+                                    <p>Welcome, <span id="userName"></span>!</p>
+                                    <button class="btn-logout" id="logoutBtn">Logout</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu">
+            <div class="mobile-menu-header">
+                <a href="#" class="mobile-logo">
+                    <img src="images/logo.png" alt="PUMA">
+                </a>
+                <button class="close-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mobile-menu-content">
+                <a href="#" class="mobile-nav-item active"><span class="highlight">New</span> ⚡</a>
+                <a href="#" class="mobile-nav-item">Men</a>
+                <a href="#" class="mobile-nav-item">Women</a>
+                <a href="#" class="mobile-nav-item">Sports</a>
+                <a href="#" class="mobile-nav-item">Motorsport</a>
+                <a href="#" class="mobile-nav-item">Lifestyle</a>
+                <a href="#" class="mobile-nav-item">Kids</a>
+                <a href="#" class="mobile-nav-item">Sale</a>
+            </div>
+        </div>
+
+        <!-- Search Overlay -->
+        <div class="search-overlay">
+            <div class="search-header">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="SEARCH PUMA.COM" class="search-input">
+                    </div>
+                    <button class="close-search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="search-content">
+                <div class="search-content-inner">
+                    <div class="search-section">
+                        <h2>TRENDING SEARCHES</h2>
+                        <div class="trending-searches">
+                            <a href="#" class="search-link">Cap</a>
+                            <a href="#" class="search-link">Shoes</a>
+                            <a href="#" class="search-link">Rcb</a>
+                            <a href="#" class="search-link">Slides</a>
+                            <a href="#" class="search-link">Bag</a>
+                            <a href="#" class="search-link">Sneakers</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Slider -->
+    <section class="hero-slider">
+        <div class="slider-container">
+            <div class="slider-wrapper">
+                <!-- First Slide -->
+                <div class="slider-content active">
+                    <div class="text-content">
+                        <h2 class="slider-subtitle">New Summer</h2>
+                        <h1 class="slider-title">Shoes Collection</h1>
+                        <p class="slider-description">
+                            Competently expedite alternative benefits whereas leading-edge catalysts for change. Globally leverage existing an expanded array of leadership.
+                        </p>
+                        <a href="#" class="shop-now-btn">
+                            Shop Now
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="image-content">
+                        <div class="image-wrapper">
+                            <img src="images/img3.avif" alt="Summer Collection Shoe">
+                        </div>
+                        <div class="circle-design">
+                            <svg viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="80" class="circle-outer"/>
+                                <circle cx="100" cy="100" r="60" class="circle-inner"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Second Slide -->
+                <div class="slider-content">
+                    <div class="text-content">
+                        <h2 class="slider-subtitle">New Arrivals</h2>
+                        <h1 class="slider-title">Sports Collection</h1>
+                        <p class="slider-description">
+                            Discover our latest sports collection featuring innovative designs and performance-enhancing technology for athletes of all levels.
+                        </p>
+                        <a href="#" class="shop-now-btn">
+                            Shop Now
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="image-content">
+                        <div class="image-wrapper no-rotate">
+                            <img src="images/img5.avif" alt="Sports Collection">
+                        </div>
+                        <div class="circle-design">
+                            <svg viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="80" class="circle-outer"/>
+                                <circle cx="100" cy="100" r="60" class="circle-inner"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Navigation -->
+            <div class="slider-navigation">
+                <button class="slider-btn prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="slider-btn next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-products">
+        <div class="section-header">
+            <h2 class="section-title">STEP INTO THE SPOTLIGHT</h2>
+            <p class="section-subtitle">THE NEW JERSEYS ARE HERE TO SHINE</p>
+        </div>
+        
+        <div class="products-grid">
+            <!-- RCB Jersey Card -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="images/rcb.png" alt="RCB Jersey">
+                    <!-- <button class="wishlist-btn">
+                        <i class="far fa-heart"></i>
+                    </button> -->
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">UNLEASH YOUR PRIDE</h3>
+                    <p class="product-subtitle">2025 PUMA x RCB AUTHENTIC JERSEY</p>
+                    <a href="puma_rcb.html" class="shop-btn" id="rcbBtn">SHOP NOW</a>
+                </div>
+            </div>
+
+            <!-- Ferrari Card -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="images/racer.png" alt="Ferrari Collection">
+                    <!-- <button class="wishlist-btn">
+                        <i class="far fa-heart"></i>
+                    </button> -->
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">PUMA FOR SCUDERIA FERRARI HP</h3>
+                    <p class="product-subtitle">MIAMI LIMITED EDITION</p>
+                    <a href="#" class="shop-btn" id="ferrariBtn">SHOP NOW</a>
+                </div>
+            </div>
+
+            <!-- DC Jersey Card -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="images/dc.png" alt="DC Jersey">
+                    <!-- <button class="wishlist-btn">
+                        <i class="far fa-heart"></i>
+                    </button> -->
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">CAPITALS' PRIDE</h3>
+                    <p class="product-subtitle">2025 PUMA X DC AUTHENTIC JERSEY</p>
+                    <a href="#" class="shop-btn" id="dcBtn">SHOP NOW</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collections Section -->
+    <section class="collections">
+        <div class="collections-grid">
+            <!-- RCB Collection -->
+            <div class="collection-card men">
+                <h2>RCB COLLECTIONS</h2>
+                <div class="collection-image">
+                    <img src="puma_rcb_images/img1.avif" alt="RCB Collection">
+                    <!-- <button class="wishlist-btn" onclick="addToWishlist('RCB Collection', 'puma_rcb_images/img1.avif', 4999)">
+                        <i class="far fa-heart"></i>
+                    </button> -->
+                </div>
+                <div class="product-details">
+                    <h3>RCB Official Jersey 2024</h3>
+                    <p class="price">₹4,999</p>
+                </div>
+                <a href="#" class="explore-btn" id="menBtn">
+                    VIEW MORE <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Ferrari Collection -->
+            <div class="collection-card women">
+                <h2>FERRARI COLLECTIONS</h2>
+                <div class="collection-image">
+                    <img src="puma_ferrari_images/img1.avif" alt="Ferrari Collection">
+                    <!-- <button class="wishlist-btn" onclick="addToWishlist('Ferrari Collection', 'puma_ferrari_images/img1.avif', 7999)">
+                        <i class="far fa-heart"></i>
+                    </button> -->
+                </div>
+                <div class="product-details">
+                    <h3>Ferrari Race XTG Tee</h3>
+                    <p class="price">₹7,999</p>
+                </div>
+                <a href="#" class="explore-btn" id="womenBtn">
+                    VIEW MORE <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- DC Collection -->
+            <div class="collection-card sports">
+                <h2>DC COLLECTIONS</h2>
+                <div class="collection-image">
+                    <img src="puma_dc_images/img1.avif" alt="DC Collection">
+                    <!-- <button class="wishlist-btn" onclick="addToWishlist('DC Collection', 'puma_dc_images/img1.avif', 4999)">
+                        <i class="far fa-heart"></i>
+                    </button> -->
+                </div>
+                <div class="product-details">
+                    <h3>DC Official Jersey 2024</h3>
+                    <p class="price">₹4,999</p>
+                </div>
+                <a href="#" class="explore-btn" id="sportsBtn">
+                    VIEW MORE <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <!-- <section class="products-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">FEATURED PRODUCTS</h2>
+                <p class="section-subtitle">DISCOVER OUR LATEST COLLECTION</p>
+            </div> -->
+
+            <!-- Filters -->
+            <!-- <div class="filters">
+                <div class="filter-group">
+                    <div class="custom-select">
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="Men">Men</option>
+                            <option value="Women">Women</option>
+                            <option value="Sports">Sports</option>
+                        </select>
+                        <span class="select-arrow"></span>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="custom-select">
+                        <select id="sortFilter">
+                            <option value="default">Sort By: Featured</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="name">Name: A to Z</option>
+                        </select>
+                        <span class="select-arrow"></span>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Products Grid -->
+            <!-- <div class="products-grid" id="productsGrid"> -->
+                <!-- Products will be dynamically loaded here -->
+            <!-- </div> -->
+        <!-- </div> -->
+    <!-- </section> -->
+
+    <!-- Why Choose PUMA Section -->
+    <section class="why-choose-section">
+        <div class="section-header">
+            <h2 class="section-title">WHY CHOOSE PUMA</h2>
+            <p class="section-subtitle">FOREVER FASTER IS ALWAYS FIRST, NEVER SECOND</p>
+        </div>
+
+        <div class="why-choose-grid">
+            <!-- Innovation -->
+            <div class="why-choose-card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Innovation First</h3>
+                <p>Leading the way in performance technology and design innovation. From NITRO™ foam to FUZIONFIT+, we're constantly pushing boundaries.</p>
+            </div>
+
+            <!-- Heritage -->
+            <div class="why-choose-card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h3>Rich Heritage</h3>
+                <p>Over 75 years of experience in creating high-quality sportswear, trusted by athletes and style icons worldwide.</p>
+            </div>
+
+            <!-- Sustainability -->
+            <div class="why-choose-card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Sustainability</h3>
+                <p>Committed to reducing environmental impact with sustainable materials and eco-friendly manufacturing processes.</p>
+            </div>
+
+            <!-- Quality -->
+            <div class="why-choose-card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Premium Quality</h3>
+                <p>Rigorous quality control and premium materials ensure durability and performance in every product.</p>
+            </div>
+
+            <!-- Style -->
+            <div class="why-choose-card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3>Iconic Style</h3>
+                <p>Perfect blend of performance and style, creating trendsetting designs that stand out on and off the field.</p>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="why-choose-card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>Expert Support</h3>
+                <p>Dedicated customer service team and expert product advice to help you find the perfect fit for your needs.</p>
+            </div>
+        </div>
+
+        <!-- Stats Counter -->
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">75+</div>
+                <div class="stat-label">Years of Excellence</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">120+</div>
+                <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">14K+</div>
+                <div class="stat-label">Employees Worldwide</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100M+</div>
+                <div class="stat-label">Happy Customers</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog-section">
+        <div class="section-header">
+            <h2 class="section-title">LATEST FROM PUMA BLOG</h2>
+            <p class="section-subtitle">STORIES, STYLES, AND SPORTINESS</p>
+        </div>
+        
+        <div class="blog-grid">
+            <!-- Blog Post 1 -->
+            <div class="blog-card">
+                <div class="blog-image">
+                    <img src="images/img3.avif" alt="Latest Sneaker Trends">
+                    <div class="blog-date">
+                        <span>24</span>
+                        <span>MAR</span>
+                    </div>
+                </div>
+                <div class="blog-content">
+                    <div class="blog-category">Fashion</div>
+                    <h3 class="blog-title">The Evolution of Sneaker Culture: From Sport to Street Style</h3>
+                    <p class="blog-excerpt">Discover how sneakers transformed from athletic gear to fashion statements, and what's next in footwear trends.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Blog Post 2 -->
+            <div class="blog-card">
+                <div class="blog-image">
+                    <img src="images/img5.avif" alt="Sustainability in Sports">
+                    <div class="blog-date">
+                        <span>22</span>
+                        <span>MAR</span>
+                    </div>
+                </div>
+                <div class="blog-content">
+                    <div class="blog-category">Sustainability</div>
+                    <h3 class="blog-title">PUMA's Commitment to Sustainable Fashion</h3>
+                    <p class="blog-excerpt">Learn about our eco-friendly initiatives and how we're working to create a more sustainable future in sportswear.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <!-- Blog Post 3 -->
+            <div class="blog-card">
+                <div class="blog-image">
+                    <img src="images/img6.avif" alt="Training Tips">
+                    <div class="blog-date">
+                        <span>20</span>
+                        <span>MAR</span>
+                    </div>
+                </div>
+                <div class="blog-content">
+                    <div class="blog-category">Sports</div>
+                    <h3 class="blog-title">Training Tips: Maximize Your Workout Performance</h3>
+                    <p class="blog-excerpt">Expert advice on how to enhance your training routine and choose the right gear for peak performance.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- Support Section -->
+            <div class="footer-section">
+                <h3>SUPPORT</h3>
+                <ul>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="#">Promotions & Sale</a></li>
+                    <li><a href="#">Track Order</a></li>
+                    <li><a href="#">Shoe Care</a></li>
+                    <li><a href="#">Tech Glossary</a></li>
+                    <li><a href="#">Initiate Return / Exchange</a></li>
+                    <li><a href="#">Sneakers</a></li>
+                    <li><a href="#">Nitro</a></li>
+                    <li><a href="#">Cookie Settings</a></li>
+                </ul>
+            </div>
+
+            <!-- About Section -->
+            <div class="footer-section">
+                <h3>ABOUT</h3>
+                <ul>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">My Account</a></li>
+                    <li><a href="#">Exchange & Return Policy</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Shoes</a></li>
+                    <li><a href="#">Running Shoes</a></li>
+                    <li><a href="#">Sitemap</a></li>
+                </ul>
+            </div>
+
+            <!-- Company Info Section -->
+            <div class="footer-section">
+                <h3>ABOUT PUMA</h3>
+                <ul>
+                    <li><a href="#">GO WILD</a></li>
+                    <li><a href="#">Company</a></li>
+                    <li><a href="#">Corporate News</a></li>
+                    <li><a href="#">Press Center</a></li>
+                    <li><a href="#">Investors</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Store Locator</a></li>
+                    <li><a href="#">PUMA Articles</a></li>
+                </ul>
+            </div>
+
+            <!-- Stay Up To Date Section -->
+            <div class="footer-section">
+                <h3>STAY UP TO DATE</h3>
+                <div class="social-links">
+                    <a href="https://www.youtube.com/puma" class="social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="https://x.com/PUMA" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="https://in.pinterest.com/puma/" class="social-link"><i class="fab fa-pinterest"></i></a>
+                    <a href="https://www.instagram.com/puma/" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/PUMA/" class="social-link"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="payment-methods">
+                <img src="footer_images/img1.jpeg" alt="Visa">
+                <img src="footer_images/img2.jpeg" alt="Mastercard">
+                <img src="footer_images/img3.jpeg" alt="Maestro">
+                <img src="footer_images/img4.jpeg" alt="American Express">
+                <img src="footer_images/img5.jpeg" alt="UPI">
+                <img src="footer_images/img6.jpeg" alt="RuPay">
+            </div>
+            <div class="location-selector">
+                <button class="location-btn">
+                    <img src="footer_images/img7.jpeg" alt="India Flag">
+                    INDIA
+                </button>
+            </div>
+            <div class="copyright">
+                <p>© PUMA INDIA LTD, 2025. ALL RIGHTS RESERVED</p>
+                <a href="#">IMPRINT AND LEGAL DATA</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="index.js"></script>
+    <script>
+        // Check login status
+        window.addEventListener('load', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const authButtons = document.getElementById('authButtons');
+            const userInfo = document.getElementById('userInfo');
+            const userName = document.getElementById('userName');
+
+            if (currentUser) {
+                // User is logged in
+                authButtons.style.display = 'none';
+                userInfo.style.display = 'block';
+                userName.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+            } else {
+                // User is not logged in
+                authButtons.style.display = 'flex';
+                userInfo.style.display = 'none';
+            }
+        });
+
+        // Handle logout
+        document.getElementById('logoutBtn')?.addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            window.location.reload();
+        });
+
+        // Wishlist functionality
+        function addToWishlist(productName, imageUrl, price) {
+            const wishlistItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const existingItem = wishlistItems.find(item => item.name === productName);
+            
+            if (existingItem) {
+                // Remove from wishlist if already exists
+                const newWishlist = wishlistItems.filter(item => item.name !== productName);
+                localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+                showToast(`${productName} removed from wishlist`);
+                event.target.closest('.wishlist-btn').classList.remove('active');
+            } else {
+                // Add to wishlist
+                wishlistItems.push({
+                    name: productName,
+                    image: imageUrl,
+                    price: price
+                });
+                localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+                showToast(`${productName} added to wishlist`);
+                event.target.closest('.wishlist-btn').classList.add('active');
+            }
+
+            // Update wishlist count in header
+            updateWishlistCount();
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Update wishlist count
+        function updateWishlistCount() {
+            const wishlistItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const wishlistLink = document.querySelector('a[href="wishlist.html"] i');
+            
+            if (wishlistItems.length > 0) {
+                wishlistLink.classList.remove('far');
+                wishlistLink.classList.add('fas');
+            } else {
+                wishlistLink.classList.remove('fas');
+                wishlistLink.classList.add('far');
+            }
+        }
+
+        // Initialize wishlist state
+        document.addEventListener('DOMContentLoaded', function() {
+            const wishlistItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+            
+            wishlistButtons.forEach(button => {
+                const productName = button.getAttribute('onclick').split("'")[1];
+                if (wishlistItems.find(item => item.name === productName)) {
+                    button.classList.add('active');
+                }
+            });
+
+            updateWishlistCount();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUMA x Ferrari Collection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: #000;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 30px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            color: white;
+        }
+
+        .nav-links i {
+            cursor: pointer;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links i:hover {
+            color: #ccc;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ff0000;
+            color: white;
+            font-size: 12px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: normal;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-group {
+            position: relative;
+        }
+
+        .filter-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            min-width: 200px;
+            display: none;
+            z-index: 100;
+        }
+
+        .filter-dropdown.active {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-dropdown label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .filter-dropdown label:hover {
+            background-color: #f5f5f5;
+        }
+
+        .clear-filters {
+            margin-left: auto;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            grid-column: 1 / -1;
+            color: #666;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+
+
+        .product-image {
+            position: relative;
+            padding-top: 100%;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+
+
+        .color-options {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px;
+            border-radius: 4px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .color-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-category {
+            font-size: 0.875rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: #000;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background-color: #333;
+        }
+
+        .btn-icon {
+            width: 40px;
+            padding: 0.75rem;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-icon:hover {
+            background-color: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 1rem;
+            }
+
+            .product-info {
+                padding: 1rem;
+            }
+
+            .filter-dropdown {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                max-width: 300px;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <img src="images/logo.png" alt="PUMA Logo">
+            </div>
+            <div class="nav-links">
+                <i class="fas fa-search"></i>
+                <i class="far fa-heart"></i>
+                <i class="fas fa-shopping-cart" onclick="window.location.href='cart.html'">
+                    <span class="cart-badge" id="cart-badge">0</span>
+                </i>
+                <i class="far fa-user"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="filters">
+            <div class="filter-group">
+                <button class="filter-btn" onclick="toggleFilter('category')">
+                    <span>CATEGORY</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="filter-dropdown" id="category-filter">
+                    <label><input type="checkbox" value="Men" onchange="applyFilters()"> Men</label>
+                    <label><input type="checkbox" value="unisex" onchange="applyFilters()"> Unisex</label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <button class="filter-btn" onclick="toggleFilter('type')">
+                    <span>PRODUCT TYPE</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="filter-dropdown" id="type-filter">
+                    <label><input type="checkbox" value="tshirt" onchange="applyFilters()"> T-Shirts & Polos</label>
+                    <label><input type="checkbox" value="jacket" onchange="applyFilters()"> Jackets</label>
+                    <label><input type="checkbox" value="pants" onchange="applyFilters()"> Pants & Shorts</label>
+                    <label><input type="checkbox" value="cap" onchange="applyFilters()"> Caps</label>
+                    <label><input type="checkbox" value="backpack" onchange="applyFilters()"> Bags</label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <button class="filter-btn" onclick="toggleFilter('price')">
+                    <span>PRICE RANGE</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="filter-dropdown" id="price-filter">
+                    <label><input type="checkbox" value="0-5000" onchange="applyFilters()"> Under ₹5,000</label>
+                    <label><input type="checkbox" value="5000-10000" onchange="applyFilters()"> ₹5,000 - ₹10,000</label>
+                    <label><input type="checkbox" value="10000-15000" onchange="applyFilters()"> ₹10,000 -
+                        ₹15,000</label>
+                    <label><input type="checkbox" value="15000+" onchange="applyFilters()"> Above ₹15,000</label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <button class="filter-btn" onclick="toggleFilter('collection')">
+                    <span>COLLECTION</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="filter-dropdown" id="collection-filter">
+                    <label><input type="checkbox" value="Race" onchange="applyFilters()"> Race Collection</label>
+                    <label><input type="checkbox" value="Miami" onchange="applyFilters()"> Miami Collection</label>
+                    <label><input type="checkbox" value="Motorsport" onchange="applyFilters()"> Motorsport</label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <button class="filter-btn" onclick="toggleFilter('sort')">
+                    <span>SORT BY</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="filter-dropdown" id="sort-filter">
+                    <label><input type="radio" name="sort" value="price-low-high" onchange="applyFilters()"> Price: Low
+                        to High</label>
+                    <label><input type="radio" name="sort" value="price-high-low" onchange="applyFilters()"> Price: High
+                        to Low</label>
+                    <label><input type="radio" name="sort" value="name-a-z" onchange="applyFilters()"> Name: A to
+                        Z</label>
+                    <label><input type="radio" name="sort" value="name-z-a" onchange="applyFilters()"> Name: Z to
+                        A</label>
+                </div>
+            </div>
+
+            <button class="filter-btn clear-filters" onclick="clearFilters()">
+                <i class="fas fa-times"></i>
+                CLEAR ALL
+            </button>
+        </div>
+
+        <div class="product-grid" id="product-grid">
+
+        </div>
+    </main>
+
+    <script>
+        const products = [
+            {
+                id: 71,
+                name: "Scuderia Ferrari 2025 Team Men's Motorsport Tee",
+                price: 5999,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img1.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 72,
+                name: "Scuderia Ferrari Drivers T7 Men's Oversized Motorsport Jacket",
+                price: 8999,
+                type: "jacket",
+                category: "Men",
+                image: "puma_ferrari_images/img2.avif",
+                colors: ["green", "navy"]
+            },
+            {
+                id: 73,
+                name: "Scuderia Ferrari Drivers Men's Motorsport Tee",
+                price: 6999,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img3.avif",
+                colors: ["green", "navy"]
+            },
+            {
+                id: 74,
+                name: "Scuderia Ferrari Drivers Men's Motorsport Tee",
+                price: 6999,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img4.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 75,
+                name: "Scuderia Ferrari Drivers T7 Men's Oversized Motorsport Pants",
+                price: 7999,
+                type: "pants",
+                category: "Men",
+                image: "puma_ferrari_images/img5.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 76,
+                name: "Scuderia Ferrari 2025 Team Men's Motorsport Shirt",
+                price: 8999,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img6.avif",
+                colors: ["black", "red"]
+            },
+            {
+                id: 77,
+                name: "Scuderia Ferrari Team Men's Motorsport Racing Jacket",
+                price: 17999,
+                type: "jacket",
+                category: "Men",
+                image: "puma_ferrari_images/img7.avif",
+                colors: ["black", "red"]
+            },
+            {
+                id: 78,
+                name: "Scuderia Ferrari Team Men's Softshell Motorsport Jacket",
+                price: 17999,
+                type: "jacket",
+                category: "Men",
+                image: "puma_ferrari_images/img8.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 79,
+                name: "Scuderia Ferrari Team Men's Motorsport Reversible Jacket",
+                price: 17999,
+                type: "jacket",
+                category: "Men",
+                image: "puma_ferrari_images/img9.avif",
+                colors: ["black", "red"]
+            },
+            {
+                id: 80,
+                name: "Scuderia Ferrari 2025 Team Men's Motorsport Tee",
+                price: 6499,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img10.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 81,
+                name: "Scuderia Ferrari Hamilton Motorsport Baseball Cap",
+                price: 2799,
+                type: "cap",
+                category: "unisex",
+                image: "puma_ferrari_images/img11.avif",
+                colors: ["black", "red"]
+            },
+            {
+                id: 82,
+                name: "Scuderia Ferrari Miami T7 Men's Motorsport 7",
+                price: 6499,
+                type: "pants",
+                category: "Men",
+                image: "puma_ferrari_images/img27.avif",
+                colors: ["black", "red"]
+            },
+            {
+                id: 83,
+                name: "Scuderia Ferrari Miami Men's Motorsport Relaxed Fit Graphic Tee",
+                price: 3999,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img13.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 84,
+                name: "Scuderia Ferrari Miami Men's Motorsport Relaxed Fit Graphic Tee",
+                price: 3999,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img14.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 85,
+                name: "Scuderia Ferrari Miami T7 Men's Motorsport Jacket",
+                price: 9999,
+                type: "jacket",
+                category: "Men",
+                image: "puma_ferrari_images/img15.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 86,
+                name: "Scuderia Ferrari Miami Men's Graphic Relaxed Fit Tee",
+                price: 3499,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img16.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 87,
+                name: "Ferrari Miami Men's Graphic Relaxed Fit Tee",
+                price: 3499,
+                type: "pants",
+                category: "Men",
+                image: "puma_ferrari_images/img17.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 88,
+                name: "Scuderia Ferrari Miami T7 Men's Motorsports",
+                price: 6499,
+                type: "pants",
+                category: "Men",
+                image: "puma_ferrari_images/img18.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 89,
+                name: "Scuderia Ferrari Miami T7 Men's Motorsport Jacket",
+                price: 9999,
+                type: "jacket",
+                category: "Men",
+                image: "puma_ferrari_images/img19.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 90,
+                name: "Scuderia Ferrari Race SDS 2.0 Premium Men's Motorsport Pants",
+                price: 4499,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img20.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 91,
+                name: "PUMA x RCB Men's Training Shorts",
+                price: 1999,
+                type: "pants",
+                category: "Men",
+                image: "puma_ferrari_images/img21.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 92,
+                name: "Scuderia Ferrari Race Pro Motorsport Backpack",
+                price: 4549,
+                type: "backpack",
+                category: "Men",
+                image: "puma_ferrari_images/img22.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 93,
+                name: "Ferrari Race Motorsport Trucker Cap",
+                price: 1999,
+                type: "cap",
+                category: "Men",
+                image: "puma_ferrari_images/img23.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 94,
+                name: "Scuderia Ferrari Race Colour Splash Motorsport Men's Shorts",
+                price: 4249,
+                type: "pants",
+                category: "Men",
+                image: "puma_ferrari_images/img24.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 95,
+                name: "Scuderia Ferrari Race Colour Splash Motorsport Men's Hoodie",
+                price: 7649,
+                type: "jacket",
+                category: "Men",
+                image: "puma_ferrari_images/img26.avif",
+                colors: ["red", "navy"]
+            },
+            {
+                id: 96,
+                name: "Ferrari Race Color Graphic Men's Motorsport Tee",
+                price: 3399,
+                type: "tshirt",
+                category: "Men",
+                image: "puma_ferrari_images/img25.avif",
+                colors: ["red", "navy"]
+            }
+        ];
+
+        function renderProducts() {
+            renderFilteredProducts(products);
+        }
+
+        function addToCart(productId) {
+            // Get existing cart items from localStorage
+            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Find the product in our products array
+            const product = products.find(p => p.id === productId);
+
+            if (product) {
+                // Check if item already exists in cart
+                const existingItem = cartItems.find(item => item.id === productId);
+
+                if (existingItem) {
+                    // If item exists, increment quantity
+                    existingItem.quantity += 1;
+                } else {
+                    // If item doesn't exist, add it with quantity 1
+                    cartItems.push({
+                        ...product,
+                        quantity: 1
+                    });
+                }
+
+                // Save updated cart back to localStorage
+                localStorage.setItem('cart', JSON.stringify(cartItems));
+
+                // Update cart badge
+                updateCartBadge();
+
+                // Show success message
+                alert('Product added to cart successfully!');
+            }
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            badge.textContent = totalItems;
+            badge.style.display = totalItems > 0 ? 'flex' : 'none';
+
+            // Update badge on main page if it exists
+            try {
+                window.opener && window.opener.document &&
+                    window.opener.document.getElementById('cart-badge') &&
+                    (window.opener.document.getElementById('cart-badge').textContent = totalItems) &&
+                    (window.opener.document.getElementById('cart-badge').style.display = totalItems > 0 ? 'flex' : 'none');
+            } catch (e) {
+                console.log('Main window not accessible');
+            }
+        }
+
+        function addToWishlist(productId) {
+            // Get existing wishlist items from localStorage
+            let wishlistItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            // Find the product in our products array
+            const product = products.find(p => p.id === productId);
+
+            if (product) {
+                // Check if item already exists in wishlist
+                const existingItem = wishlistItems.find(item => item.id === productId);
+
+                if (!existingItem) {
+                    // If item doesn't exist, add it
+                    wishlistItems.push(product);
+
+                    // Save updated wishlist back to localStorage
+                    localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+
+                    // Show success message
+                    alert('Product added to wishlist successfully!');
+                } else {
+                    alert('This item is already in your wishlist!');
+                }
+            }
+        }
+
+        // Initialize the cart badge
+        updateCartBadge();
+
+        // Initialize the product listing
+        renderProducts();
+
+        function toggleFilter(filterId) {
+            const dropdown = document.getElementById(`${filterId}-filter`);
+            const allDropdowns = document.querySelectorAll('.filter-dropdown');
+
+            allDropdowns.forEach(d => {
+                if (d.id !== `${filterId}-filter`) {
+                    d.classList.remove('active');
+                }
+            });
+
+            dropdown.classList.toggle('active');
+        }
+
+        function applyFilters() {
+            const selectedCategories = Array.from(document.querySelectorAll('#category-filter input:checked')).map(cb => cb.value);
+            const selectedTypes = Array.from(document.querySelectorAll('#type-filter input:checked')).map(cb => cb.value);
+            const selectedPriceRanges = Array.from(document.querySelectorAll('#price-filter input:checked')).map(cb => cb.value);
+            const selectedCollections = Array.from(document.querySelectorAll('#collection-filter input:checked')).map(cb => cb.value);
+            const sortValue = document.querySelector('#sort-filter input:checked')?.value;
+
+            let filteredProducts = products.filter(product => {
+                const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+                const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(product.type);
+                const collectionMatch = selectedCollections.length === 0 ||
+                    selectedCollections.some(collection => product.name.includes(collection));
+                const priceMatch = selectedPriceRanges.length === 0 || selectedPriceRanges.some(range => {
+                    const [min, max] = range.split('-').map(Number);
+                    if (range === '15000+') return product.price >= 15000;
+                    return product.price >= min && product.price < max;
+                });
+
+                return categoryMatch && typeMatch && collectionMatch && priceMatch;
+            });
+
+            // Apply sorting
+            if (sortValue) {
+                filteredProducts.sort((a, b) => {
+                    switch (sortValue) {
+                        case 'price-low-high':
+                            return a.price - b.price;
+                        case 'price-high-low':
+                            return b.price - a.price;
+                        case 'name-a-z':
+                            return a.name.localeCompare(b.name);
+                        case 'name-z-a':
+                            return b.name.localeCompare(a.name);
+                        default:
+                            return 0;
+                    }
+                });
+            }
+
+            renderFilteredProducts(filteredProducts);
+            updateFilterCounts(filteredProducts);
+        }
+
+        function renderFilteredProducts(filteredProducts) {
+            const grid = document.getElementById('product-grid');
+
+            if (filteredProducts.length === 0) {
+                grid.innerHTML = '<div class="no-results">No products match your selected filters</div>';
+                return;
+            }
+
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                        <div class="color-options">
+                            ${product.colors.map(color => `
+                                <div class="color-dot" style="background-color: ${color}"></div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${product.category} / ${product.type}</div>
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">₹${product.price}</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="addToCart(${product.id})">
+                                <i class="fas fa-shopping-cart"></i>
+                                Add to Cart
+                            </button>
+                            <button class="btn btn-icon" onclick="addToWishlist(${product.id})">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateFilterCounts(filteredProducts) {
+            // Add count next to each filter option
+            const categories = {}, types = {}, collections = {};
+
+            // Initialize counters
+            products.forEach(product => {
+                categories[product.category] = 0;
+                types[product.type] = 0;
+                if (product.name.includes('Race')) collections['Race'] = 0;
+                if (product.name.includes('Miami')) collections['Miami'] = 0;
+                if (product.name.includes('Motorsport')) collections['Motorsport'] = 0;
+            });
+
+            // Count items in filtered products
+            filteredProducts.forEach(product => {
+                categories[product.category]++;
+                types[product.type]++;
+                if (product.name.includes('Race')) collections['Race']++;
+                if (product.name.includes('Miami')) collections['Miami']++;
+                if (product.name.includes('Motorsport')) collections['Motorsport']++;
+            });
+
+            // Update category counts
+            document.querySelectorAll('#category-filter label').forEach(label => {
+                const value = label.querySelector('input').value;
+                const count = categories[value] || 0;
+                label.innerHTML = `<input type="checkbox" value="${value}" onchange="applyFilters()"> ${value} (${count})`;
+            });
+
+            // Update type counts
+            document.querySelectorAll('#type-filter label').forEach(label => {
+                const value = label.querySelector('input').value;
+                const count = types[value] || 0;
+                const displayName = getDisplayName(value);
+                label.innerHTML = `<input type="checkbox" value="${value}" onchange="applyFilters()"> ${displayName} (${count})`;
+            });
+
+            // Update collection counts
+            document.querySelectorAll('#collection-filter label').forEach(label => {
+                const value = label.querySelector('input').value;
+                const count = collections[value] || 0;
+                const displayName = `${value} Collection`;
+                label.innerHTML = `<input type="checkbox" value="${value}" onchange="applyFilters()"> ${displayName} (${count})`;
+            });
+        }
+
+        function getDisplayName(value) {
+            const displayNames = {
+                'tshirt': 'T-Shirts & Polos',
+                'jacket': 'Jackets',
+                'pants': 'Pants & Shorts',
+                'cap': 'Caps',
+                'backpack': 'Bags'
+            };
+            return displayNames[value] || value;
+        }
+
+        function clearFilters() {
+            document.querySelectorAll('.filter-dropdown input').forEach(input => {
+                input.checked = false;
+            });
+
+            document.querySelectorAll('.filter-dropdown').forEach(d => {
+                d.classList.remove('active');
+            });
+
+            renderProducts();
+            updateFilterCounts(products);
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.filter-group')) {
+                document.querySelectorAll('.filter-dropdown').forEach(d => {
+                    d.classList.remove('active');
+                });
+            }
+        });
+
+        // Initialize with all products and counts
+        updateFilterCounts(products);
+    </script>
+</body>
+
+</html>

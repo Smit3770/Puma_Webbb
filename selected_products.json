@@ -1,0 +1,242 @@
+[
+    {
+        "id": 1,
+        "name": "PUMA x PORSCHE Legacy Women's Sneakers",
+        "price": 11999,
+        "type": "shoes",
+        "category": "Women",
+        "image": "women_images/img1.avif"
+    },
+    {
+        "id": 2,
+        "name": "PUMA Essential Women's Training Jacket",
+        "price": 4499,
+        "type": "jacket",
+        "category": "Women",
+        "image": "women_images/img2.avif"
+    },
+    {
+        "id": 3,
+        "name": "PUMA Active Training Women's T-Shirt",
+        "price": 1499,
+        "type": "tshirt",
+        "category": "Women",
+        "image": "women_images/img3.avif"
+    },
+    {
+        "id": 4,
+        "name": "PUMA Cali Sport Women's Sneakers",
+        "price": 7999,
+        "type": "shoes",
+        "category": "Women",
+        "image": "women_images/img4.avif"
+    },
+    {
+        "id": 5,
+        "name": "PUMA Women's Running Shorts",
+        "price": 1999,
+        "type": "shorts",
+        "category": "Women",
+        "image": "women_images/img5.avif"
+    },
+    {
+        "id": 6,
+        "name": "PUMA Mayze Women's Platform Sneakers",
+        "price": 8999,
+        "type": "shoes",
+        "category": "Women",
+        "image": "women_images/img6.avif"
+    },
+    {
+        "id": 7,
+        "name": "PUMA Women's Training Leggings",
+        "price": 2999,
+        "type": "pants",
+        "category": "Women",
+        "image": "women_images/img7.avif"
+    },
+    {
+        "id": 8,
+        "name": "PUMA x PORSCHE Legacy Men's Sneakers",
+        "price": 12999,
+        "type": "shoes",
+        "category": "Men",
+        "image": "men_images/img1.avif"
+    },
+    {
+        "id": 9,
+        "name": "PUMA Men's Training T-Shirt",
+        "price": 1699,
+        "type": "tshirt",
+        "category": "Men",
+        "image": "men_images/img2.avif"
+    },
+    {
+        "id": 10,
+        "name": "PUMA x One8 Running Shoes",
+        "price": 8999,
+        "type": "shoes",
+        "category": "Men",
+        "image": "men_images/img3.avif"
+    },
+    {
+        "id": 11,
+        "name": "PUMA Men's Track Pants",
+        "price": 2999,
+        "type": "pants",
+        "category": "Men",
+        "image": "men_images/img4.avif"
+    },
+    {
+        "id": 12,
+        "name": "PUMA RS-X Sneakers",
+        "price": 8999,
+        "type": "shoes",
+        "category": "Men",
+        "image": "men_images/img5.avif"
+    },
+    {
+        "id": 13,
+        "name": "PUMA Men's Training Jacket",
+        "price": 4999,
+        "type": "jacket",
+        "category": "Men",
+        "image": "men_images/img6.avif"
+    },
+    {
+        "id": 14,
+        "name": "PUMA Men's Running Shorts",
+        "price": 1799,
+        "type": "shorts",
+        "category": "Men",
+        "image": "men_images/img7.avif"
+    },
+    {
+        "id": 15,
+        "name": "PUMA Cricket Batting Gloves",
+        "price": 2999,
+        "type": "cricket",
+        "category": "Sports",
+        "image": "sports_images/img1.avif"
+    },
+    {
+        "id": 16,
+        "name": "PUMA Football Training Ball",
+        "price": 1999,
+        "type": "football",
+        "category": "Sports",
+        "image": "sports_images/img2.avif"
+    },
+    {
+        "id": 17,
+        "name": "PUMA Running Performance Shoes",
+        "price": 8999,
+        "type": "shoes",
+        "category": "Sports",
+        "image": "sports_images/img3.avif"
+    },
+    {
+        "id": 18,
+        "name": "PUMA Cricket Jersey",
+        "price": 3499,
+        "type": "jersey",
+        "category": "Sports",
+        "image": "sports_images/img4.avif"
+    },
+    {
+        "id": 19,
+        "name": "PUMA Basketball Pro Shoes",
+        "price": 9999,
+        "type": "shoes",
+        "category": "Sports",
+        "image": "sports_images/img5.avif"
+    },
+    {
+        "id": 20,
+        "name": "PUMA Training Gym Bag",
+        "price": 2499,
+        "type": "accessories",
+        "category": "Sports",
+        "image": "sports_images/img6.avif"
+    },
+    {
+        "id": 21,
+        "name": "PUMA x BMW M Motorsport T-Shirt",
+        "price": 2999,
+        "type": "tshirt",
+        "category": "Men",
+        "image": "men_images/img8.avif"
+    },
+    {
+        "id": 22,
+        "name": "PUMA x Ferrari Race Jacket",
+        "price": 7999,
+        "type": "jacket",
+        "category": "Men",
+        "image": "men_images/img9.avif"
+    },
+    {
+        "id": 23,
+        "name": "PUMA Yoga Training Mat",
+        "price": 1999,
+        "type": "accessories",
+        "category": "Sports",
+        "image": "sports_images/img7.avif"
+    },
+    {
+        "id": 24,
+        "name": "PUMA Women's Fitness Gloves",
+        "price": 1499,
+        "type": "accessories",
+        "category": "Women",
+        "image": "women_images/img8.avif"
+    },
+    {
+        "id": 25,
+        "name": "PUMA x Red Bull Racing Cap",
+        "price": 1999,
+        "type": "accessories",
+        "category": "Sports",
+        "image": "sports_images/img8.avif"
+    },
+    {
+        "id": 26,
+        "name": "PUMA Women's Sports Bra",
+        "price": 2499,
+        "type": "accessories",
+        "category": "Women",
+        "image": "women_images/img9.avif"
+    },
+    {
+        "id": 27,
+        "name": "PUMA Men's Running Socks Pack",
+        "price": 999,
+        "type": "accessories",
+        "category": "Men",
+        "image": "men_images/img10.avif"
+    },
+    {
+        "id": 28,
+        "name": "PUMA Tennis Racket",
+        "price": 4999,
+        "type": "tennis",
+        "category": "Sports",
+        "image": "sports_images/img9.avif"
+    },
+    {
+        "id": 29,
+        "name": "PUMA Women's Duffel Bag",
+        "price": 2999,
+        "type": "accessories",
+        "category": "Women",
+        "image": "women_images/img10.avif"
+    },
+    {
+        "id": 30,
+        "name": "PUMA Basketball",
+        "price": 1799,
+        "type": "basketball",
+        "category": "Sports",
+        "image": "sports_images/img10.avif"
+    }
+] 

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Merchandise - PUMA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="PUMA">
+            </a>
+            
+            <!-- Main Menu -->
+            <div class="nav-links">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="men.html" class="nav-item">Men</a>
+                <a href="women.html" class="nav-item">Women</a>
+                <a href="sports.html" class="nav-item">Sports</a>
+                <a href="team-merchandise.html" class="nav-item active">Team Merchandise</a>
+            </div>
+
+            <!-- Right Menu -->
+            <div class="nav-right">
+                <div class="nav-icons">
+                    <a href="wishlist.html" class="icon-link">
+                        <i class="far fa-heart" id="wishlist-icon"></i>
+                        <span id="wishlist-badge" class="cart-badge"></span>
+                    </a>
+                    <a href="cart.html" class="icon-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-badge" class="cart-badge"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Team Categories -->
+    <section class="team-categories">
+        <div class="category-buttons">
+            <button class="category-btn active" data-category="all">All Teams</button>
+            <button class="category-btn" data-category="rcb">RCB</button>
+            <button class="category-btn" data-category="ferrari">Ferrari</button>
+            <button class="category-btn" data-category="dc">Delhi Capitals</button>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="category-products">
+        <div class="category-header">
+            <h1>TEAM MERCHANDISE</h1>
+            <div class="filters">
+                <select class="filter-select">
+                    <option value="">Sort By</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="newest">Newest First</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="products-grid">
+            <!-- Products will be dynamically loaded here -->
+        </div>
+    </section>
+
+    <!-- Product Details Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <div class="product-images">
+                    <div class="main-image">
+                        <img id="modalMainImage" src="" alt="Product Image">
+                    </div>
+                    <div class="thumbnail-images" id="modalThumbnails">
+                        <!-- Thumbnails will be added dynamically -->
+                    </div>
+                </div>
+                <div class="product-details">
+                    <h2 id="modalProductName"></h2>
+                    <p class="modal-category" id="modalCategory"></p>
+                    <p class="modal-price" id="modalPrice"></p>
+                    <div class="size-selector">
+                        <h3>Select Size</h3>
+                        <div class="size-options">
+                            <button class="size-btn">S</button>
+                            <button class="size-btn">M</button>
+                            <button class="size-btn">L</button>
+                            <button class="size-btn">XL</button>
+                            <button class="size-btn">XXL</button>
+                        </div>
+                    </div>
+                    <div class="product-description" id="modalDescription"></div>
+                    <div class="action-buttons">
+                        <button class="add-to-cart-modal">Add to Cart</button>
+                        <button class="wishlist-modal">
+                            <i class="far fa-heart"></i> Add to Wishlist
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="tshirt.js"></script>
+    <script>
+        // Function to display products
+        function displayProducts(products) {
+            const productsGrid = document.querySelector('.products-grid');
+            if (!productsGrid) return;
+            
+            productsGrid.innerHTML = '';
+            
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            products.forEach(product => {
+                const isInWishlist = wishlist.some(item => item.id === product.id);
+                const productCard = `
+                    <div class="product-card" data-id="${product.id}">
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}">
+                            
+                        </div>
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <p class="category">${product.type}</p>
+                            <p class="price">₹${product.price.toLocaleString()}</p>
+                            <button class="view-more-btn" onclick="showProductDetails(${product.id})">View More</button>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                    </div>
+                `;
+                productsGrid.innerHTML += productCard;
+            });
+        }
+
+        // Function to show product details in modal
+        function showProductDetails(productId) {
+            const product = getTshirtProductById(productId);
+            if (!product) return;
+
+            // Update modal content
+            document.getElementById('modalMainImage').src = product.image;
+            document.getElementById('modalProductName').textContent = product.name;
+            document.getElementById('modalCategory').textContent = product.type;
+            document.getElementById('modalPrice').textContent = `₹${product.price.toLocaleString()}`;
+            document.getElementById('modalDescription').innerHTML = `
+                <h3>Product Details</h3>
+                <ul>
+                    <li>Material: Premium quality fabric</li>
+                    <li>Style: Regular fit</li>
+                    <li>Occasion: Sports, Casual wear</li>
+                    <li>Care Instructions: Machine wash</li>
+                </ul>
+            `;
+
+            // Add thumbnails
+            const thumbnailsContainer = document.getElementById('modalThumbnails');
+            thumbnailsContainer.innerHTML = '';
+            // Add multiple views of the same product (you can add more images)
+            [product.image].forEach(img => {
+                thumbnailsContainer.innerHTML += `
+                    <div class="thumbnail">
+                        <img src="${img}" alt="${product.name}" onclick="updateMainImage('${img}')">
+                    </div>
+                `;
+            });
+
+            // Show modal
+            document.getElementById('productModal').style.display = 'flex';
+
+            // Update wishlist button state
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const isInWishlist = wishlist.some(item => item.id === productId);
+            const wishlistBtn = document.querySelector('.wishlist-modal');
+            wishlistBtn.innerHTML = isInWishlist ? 
+                '<i class="fas fa-heart"></i> Remove from Wishlist' : 
+                '<i class="far fa-heart"></i> Add to Wishlist';
+            wishlistBtn.onclick = () => toggleWishlist(productId, product.name, '', product.price, product.image);
+
+            // Add to cart functionality from modal
+            const addToCartBtn = document.querySelector('.add-to-cart-modal');
+            addToCartBtn.onclick = () => {
+                addToCart(productId);
+                document.getElementById('productModal').style.display = 'none';
+            };
+        }
+
+        // Function to update main image in modal
+        function updateMainImage(src) {
+            document.getElementById('modalMainImage').src = src;
+        }
+
+        // Close modal when clicking the close button or outside the modal
+        document.querySelector('.close-modal').onclick = () => {
+            document.getElementById('productModal').style.display = 'none';
+        };
+
+        window.onclick = (event) => {
+            const modal = document.getElementById('productModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Size selector functionality
+        document.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+        });
+
+        // Function to filter products by team
+        function filterByTeam(team) {
+            if (team === 'all') {
+                return getAllTshirtProducts();
+            }
+            return alltshirts[team] || [];
+        }
+
+        // Function to add item to cart
+        function addToCart(productId) {
+            const product = getTshirtProductById(productId);
+            if (!product) return;
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+                alert(`${product.name} quantity increased in cart!`);
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1,
+                    category: product.category,
+                    type: product.type
+                });
+                alert(`${product.name} added to cart successfully!`);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+
+        // Function to toggle wishlist
+        function toggleWishlist(productId, productName, description, price, image) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const index = wishlist.findIndex(item => item.id === productId);
+            
+            if (index === -1) {
+                wishlist.push({ 
+                    id: productId, 
+                    name: productName, 
+                    description: description || '', 
+                    price: price, 
+                    image: image 
+                });
+                alert(`${productName} added to wishlist!`);
+            } else {
+                wishlist.splice(index, 1);
+                alert(`${productName} removed from wishlist!`);
+            }
+            
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            updateWishlistBadge();
+            
+            const wishlistBtn = document.querySelector(`[data-id="${productId}"] .wishlist-btn`);
+            if (wishlistBtn) {
+                wishlistBtn.classList.toggle('active');
+            }
+        }
+
+        // Update cart badge
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            if (!badge) return;
+            
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            
+            badge.textContent = totalItems;
+            badge.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+
+        // Update wishlist badge
+        function updateWishlistBadge() {
+            const badge = document.getElementById('wishlist-badge');
+            if (!badge) return;
+            
+            const wishlistItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+            
+            badge.textContent = wishlistItems.length;
+            badge.style.display = wishlistItems.length > 0 ? 'flex' : 'none';
+        }
+
+        // Initialize team category buttons
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active state
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Filter products
+                const team = button.dataset.category;
+                const filteredProducts = filterByTeam(team);
+                displayProducts(filteredProducts);
+            });
+        });
+
+        // Sort products
+        const filterSelect = document.querySelector('.filter-select');
+        if (filterSelect) {
+            filterSelect.addEventListener('change', (e) => {
+                const activeTeam = document.querySelector('.category-btn.active').dataset.category;
+                let sortedProducts = [...filterByTeam(activeTeam)];
+                
+                switch(e.target.value) {
+                    case 'price-low':
+                        sortedProducts.sort((a, b) => a.price - b.price);
+                        break;
+                    case 'price-high':
+                        sortedProducts.sort((a, b) => b.price - a.price);
+                        break;
+                    case 'newest':
+                        sortedProducts.reverse();
+                        break;
+                }
+                
+                displayProducts(sortedProducts);
+            });
+        }
+
+        // Initialize page
+        window.addEventListener('DOMContentLoaded', () => {
+            displayProducts(getAllTshirtProducts());
+            updateCartBadge();
+            updateWishlistBadge();
+        });
+    </script>
+
+    <style>
+        .team-categories {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .category-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover {
+            border-color: #000;
+        }
+
+        .category-btn.active {
+            background-color: #000;
+            color: white;
+            border-color: #000;
+        }
+
+        /* View More Button Styles */
+        .view-more-btn {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-more-btn:hover {
+            background: #333;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 8px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .modal-body {
+            display: flex;
+            padding: 30px;
+            gap: 30px;
+        }
+
+        .product-images {
+            flex: 1;
+        }
+
+        .main-image {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .thumbnail-images {
+            display: flex;
+            gap: 10px;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .product-details {
+            flex: 1;
+            padding-right: 20px;
+        }
+
+        .modal-category {
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .modal-price {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+
+        .size-selector {
+            margin: 20px 0;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .size-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            background: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .size-btn:hover {
+            border-color: #000;
+        }
+
+        .size-btn.selected {
+            background: #000;
+            color: white;
+            border-color: #000;
+        }
+
+        .product-description {
+            margin: 20px 0;
+        }
+
+        .product-description ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-description li {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .add-to-cart-modal {
+            flex: 2;
+            padding: 15px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .wishlist-modal {
+            flex: 1;
+            padding: 15px;
+            background: white;
+            border: 1px solid #000;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-to-cart-modal:hover {
+            background: #333;
+        }
+
+        .wishlist-modal:hover {
+            background: #f5f5f5;
+        }
+
+        @media (max-width: 768px) {
+            .modal-body {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .product-details {
+                padding-right: 0;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</body>
+</html> 

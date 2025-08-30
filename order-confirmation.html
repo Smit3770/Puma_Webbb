@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - PUMA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .confirmation-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .confirmation-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .confirmation-header i {
+            font-size: 64px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .confirmation-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .order-details {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .order-details h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .order-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .info-group h3 {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .info-group p {
+            color: #333;
+            margin: 5px 0;
+            font-size: 15px;
+        }
+
+        .order-items {
+            margin-top: 30px;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .item-details h3 {
+            font-size: 16px;
+            margin: 0 0 5px 0;
+        }
+
+        .item-details p {
+            color: #666;
+            margin: 3px 0;
+        }
+
+        .order-summary {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .final-total {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .continue-shopping {
+            background: #000;
+            color: #fff;
+        }
+
+        .track-order {
+            background: #f5f5f5;
+            color: #000;
+            border: 1px solid #ddd;
+        }
+
+        .continue-shopping:hover {
+            background: #333;
+        }
+
+        .track-order:hover {
+            background: #e5e5e5;
+        }
+
+        @media (max-width: 768px) {
+            .order-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="PUMA">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Order Confirmation Content -->
+    <div class="confirmation-container">
+        <div class="confirmation-header">
+            <i class="fas fa-check-circle"></i>
+            <h1>Thank You for Your Order!</h1>
+            <p>Order #PUM2025789 has been successfully placed</p>
+        </div>
+
+        <div class="order-details">
+            <h2>Order Details</h2>
+            <div class="order-info">
+                <div class="info-group">
+                    <h3>Shipping Address</h3>
+                    <p id="customerName">John Doe</p>
+                    <p id="address">123 Main Street</p>
+                    <p id="cityState">Mumbai, Maharashtra</p>
+                    <p id="pincode">400001</p>
+                    <p id="phone">+91 98765 43210</p>
+                </div>
+                <div class="info-group">
+                    <h3>Delivery Information</h3>
+                    <p><strong>Estimated Delivery:</strong> 3-5 Business Days</p>
+                    <p><strong>Shipping Method:</strong> Standard Delivery</p>
+                    <p><strong>Order Date:</strong> <span id="orderDate"></span></p>
+                </div>
+            </div>
+
+            <div class="order-items">
+                <div class="order-item">
+                    <img src="images/rcb.png" alt="RCB Jersey">
+                    <div class="item-details">
+                        <h3>RCB Jersey 2025</h3>
+                        <p>Size: L</p>
+                        <p>Quantity: 1</p>
+                        <p>₹4,999</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <span>₹4,999</span>
+                </div>
+                <div class="total-row">
+                    <span>Shipping</span>
+                    <span>₹99</span>
+                </div>
+                <div class="total-row">
+                    <span>Tax</span>
+                    <span>₹250</span>
+                </div>
+                <div class="total-row final-total">
+                    <span>Total</span>
+                    <span>₹5,348</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="index.html" class="action-btn continue-shopping">Continue Shopping</a>
+            <a href="#" class="action-btn track-order">Track Order</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="payment-methods">
+                <img src="footer_images/img1.jpeg" alt="Visa">
+                <img src="footer_images/img2.jpeg" alt="Mastercard">
+                <img src="footer_images/img3.jpeg" alt="Maestro">
+                <img src="footer_images/img4.jpeg" alt="American Express">
+                <img src="footer_images/img5.jpeg" alt="UPI">
+                <img src="footer_images/img6.jpeg" alt="RuPay">
+            </div>
+            <div class="copyright">
+                <p>© PUMA INDIA LTD, 2025. ALL RIGHTS RESERVED</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get order details from localStorage
+            const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
+            if (!orderDetails) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Update order number
+            document.querySelector('.confirmation-header p').textContent = 
+                `Order #${orderDetails.orderNumber} has been successfully placed`;
+
+            // Update shipping address
+            if (orderDetails.shippingAddress) {
+                document.getElementById('customerName').textContent = orderDetails.shippingAddress.name;
+                document.getElementById('address').textContent = orderDetails.shippingAddress.address;
+                document.getElementById('cityState').textContent = orderDetails.shippingAddress.city;
+                document.getElementById('pincode').textContent = orderDetails.shippingAddress.pincode;
+                document.getElementById('phone').textContent = orderDetails.shippingAddress.phone;
+            }
+
+            // Set order date
+            const orderDate = new Date();
+            document.getElementById('orderDate').textContent = orderDate.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Display order items
+            const orderItemsContainer = document.querySelector('.order-items');
+            let subtotal = 0;
+            const shipping = 99;
+
+            let itemsHTML = '';
+            orderDetails.items.forEach(item => {
+                subtotal += item.price * item.quantity;
+                itemsHTML += `
+                    <div class="order-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="item-details">
+                            <h3>${item.name}</h3>
+                            <p>Size: ${item.size || 'L'}</p>
+                            <p>Quantity: ${item.quantity}</p>
+                            <p>₹${item.price}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            orderItemsContainer.innerHTML = itemsHTML;
+
+            // Calculate and update totals
+            const tax = Math.round(subtotal * 0.05); // 5% tax
+            const orderSummary = document.querySelector('.order-summary');
+            orderSummary.innerHTML = `
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <span>₹${subtotal}</span>
+                </div>
+                <div class="total-row">
+                    <span>Shipping</span>
+                    <span>₹${shipping}</span>
+                </div>
+                <div class="total-row">
+                    <span>Tax</span>
+                    <span>₹${tax}</span>
+                </div>
+                <div class="total-row final-total">
+                    <span>Total</span>
+                    <span>₹${subtotal + shipping + tax}</span>
+                </div>
+            `;
+
+            // Clear order details from localStorage
+            localStorage.removeItem('orderDetails');
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - PUMA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .wishlist-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .wishlist-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .wishlist-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .empty-wishlist {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .empty-wishlist i {
+            font-size: 48px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .empty-wishlist p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .continue-shopping-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #000;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .continue-shopping-btn:hover {
+            background-color: #333;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .wishlist-item {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .wishlist-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .wishlist-item-image {
+            position: relative;
+            padding-top: 100%;
+            overflow: hidden;
+        }
+
+        .wishlist-item-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .wishlist-item-info {
+            padding: 15px;
+        }
+
+        .wishlist-item-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .wishlist-item-price {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .wishlist-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .move-to-cart-btn, .remove-from-wishlist-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .move-to-cart-btn {
+            background-color: #000;
+            color: white;
+        }
+
+        .move-to-cart-btn:hover {
+            background-color: #333;
+        }
+
+        .remove-from-wishlist-btn {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #000;
+        }
+
+        .remove-from-wishlist-btn:hover {
+            background-color: #f5f5f5;
+        }
+
+        @media (max-width: 768px) {
+            .wishlist-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="PUMA">
+            </a>
+            
+            <!-- Main Menu -->
+            <div class="nav-links">
+                <a href="index.html" class="nav-item">Home</a>
+                <a href="men.html" class="nav-item">Men</a>
+                <a href="women.html" class="nav-item">Women</a>
+                <a href="sports.html" class="nav-item">Sports</a>
+                <a href="team-merchandise.html" class="nav-item">Team Merchandise</a>
+            </div>
+
+            <!-- Right Menu -->
+            <div class="nav-right">
+                <div class="nav-icons">
+                    <a href="wishlist.html" class="icon-link active">
+                        <i class="fas fa-heart"></i>
+                        <span id="wishlist-badge" class="cart-badge"></span>
+                    </a>
+                    <a href="cart.html" class="icon-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-badge" class="cart-badge"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Wishlist Content -->
+    <div class="wishlist-container">
+        <div class="wishlist-header">
+            <h1>My Wishlist</h1>
+        </div>
+        
+        <div id="wishlist-content">
+            <!-- Content will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Function to load wishlist items
+        function loadWishlist() {
+            const wishlistContent = document.getElementById('wishlist-content');
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            
+            if (wishlist.length === 0) {
+                wishlistContent.innerHTML = `
+                    <div class="empty-wishlist">
+                        <i class="far fa-heart"></i>
+                        <p>Your wishlist is empty</p>
+                        <a href="team-merchandise.html" class="continue-shopping-btn">Continue Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const wishlistGrid = document.createElement('div');
+            wishlistGrid.className = 'wishlist-grid';
+
+            wishlist.forEach(item => {
+                const wishlistItem = `
+                    <div class="wishlist-item" data-id="${item.id}">
+                        <div class="wishlist-item-image">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="wishlist-item-info">
+                            <div class="wishlist-item-name">${item.name}</div>
+                            <div class="wishlist-item-price">${item.price}</div>
+                            <div class="wishlist-item-actions">
+                                <button class="move-to-cart-btn" onclick="moveToCart('${item.id}')">
+                                    Add to Cart
+                                </button>
+                                <button class="remove-from-wishlist-btn" onclick="removeFromWishlist('${item.id}')">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                wishlistGrid.innerHTML += wishlistItem;
+            });
+
+            wishlistContent.innerHTML = '';
+            wishlistContent.appendChild(wishlistGrid);
+            updateWishlistBadge();
+        }
+
+        // Function to remove item from wishlist
+        function removeFromWishlist(productId) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist = wishlist.filter(item => item.id !== Number(productId));
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            updateWishlistBadge();
+            loadWishlist();
+        }
+
+        // Function to move item to cart
+        function moveToCart(productId) {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const item = wishlist.find(item => item.id === productId);
+            
+            if (item) {
+                // Add to cart
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const existingCartItem = cart.find(cartItem => cartItem.id === productId);
+                
+                if (existingCartItem) {
+                    existingCartItem.quantity += 1;
+                } else {
+                    cart.push({
+                        ...item,
+                        quantity: 1
+                    });
+                }
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                
+                // Remove from wishlist
+                removeFromWishlist(productId);
+                
+                // Update cart badge
+                updateCartBadge();
+                
+                alert('Item moved to cart successfully!');
+            }
+        }
+
+        // Function to update wishlist badge
+        function updateWishlistBadge() {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const badge = document.getElementById('wishlist-badge');
+            if (badge) {
+                badge.textContent = wishlist.length;
+                badge.style.display = wishlist.length > 0 ? 'flex' : 'none';
+            }
+        }
+
+        // Function to update cart badge
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const badge = document.getElementById('cart-badge');
+            if (badge) {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                badge.textContent = totalItems;
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        // Initialize page
+        window.addEventListener('DOMContentLoaded', () => {
+            loadWishlist();
+            updateCartBadge();
+        });
+    </script>
+</body>
+</html> 
